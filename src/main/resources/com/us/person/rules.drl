@@ -1,0 +1,209 @@
+package com.us.person;
+
+import com.us.person.Person;
+import function com.us.person.Function.printInfo;
+
+        declare Address
+        city : String
+        addressName : String
+        end
+
+
+
+
+        function void printName(String name,String desc) {
+            System.out.println("name:"+name+" desc:"+ desc);
+        }
+
+//        query "query age"
+//            $p : Person(age > 12);
+//        end
+
+
+
+        rule "boy"
+            salience 1
+            when
+                $p : Person(age > 0);
+            then
+                $p.setDesc("少年");
+                retract($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+        rule "youth"
+            salience 2
+            when
+                $p : Person(age > 12);
+            then
+                $p.setDesc("青年");
+                retract($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+        rule "midlife"
+            salience 3
+            when
+                $p : Person(age > 24);
+            then
+                $p.setDesc("中年");
+                retract($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+        rule "old"
+        lock-on-active true
+        //  date-effective "12-Sep-2016"
+        // date-expires "20-Sep-2016"
+          salience 5
+            when
+                $p : Person(age > 60 && age <80)
+
+            then
+                $p.setDesc("老年");
+                update($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+
+
+
+
+
+
+
+        rule "contains"
+        lock-on-active true
+          salience 4
+            when
+                $p : Person( name contains "白展");
+            then
+                $p.setDesc("我是白展堂");
+                update($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+
+        rule "noloopTest "
+
+        salience 7
+        no-loop true
+            when
+                $p:Person( desc  matches "我.*"  )
+            then
+             $p.setDesc("我是杨李大嘴");
+                    update($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+
+        rule "matches "
+        salience 6
+        lock-on-active true
+            when
+        //    对象的name 属性是不是以“李”字开头
+                $p:Person( name  matches "李.*"  )
+            then
+                $p.setDesc("我是正则李大嘴");
+                    update($p);
+        //            //halt() 本规则执行完后面的规则不执行
+        //            drools.halt();
+                printName($p.getName(),$p.getDesc());
+        end
+
+        rule "member of"
+        salience 8
+        lock-on-active true
+        //no-loop true
+            when
+                $p:Person( name memberOf "李大嘴"  )
+            then
+             $p.setDesc("我是李大嘴");
+                    update($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+
+        rule "enabled"
+        //不执行
+        enabled false
+        lock-on-active true
+        salience 9
+            when
+                $p:Person( name  matches "祝.*"  )
+            then
+             $p.setDesc("我是可用的祝无双");
+                    update($p);
+                printName($p.getName(),$p.getDesc());
+        end
+
+
+        rule "duration"
+        duration 1000
+         when
+            $p:Person(name == "祝无双")
+         then
+            $p.setDesc("我是duration祝无双");
+            retract($p);
+            //halt() 本规则执行完后面的规则不执行
+                        drools.halt();
+                printName($p.getName(),$p.getDesc());
+                System.out.println("rule thread id:"+Thread.currentThread().getId());
+         end
+
+
+        rule "activation-group"
+            salience 11
+             activation-group "test"
+          when
+             eval(true)
+          then
+            Function.printInfo("rule1 execute");
+        end
+
+
+        rule "activation-group2"
+              salience 12
+             activation-group "test"
+           when
+             eval(true)
+           then
+            Function.printInfo("rule2 execute");
+        end
+
+
+        rule "Agenda Group1"
+        salience 13
+        agenda-group "group1"
+        auto-focus true
+          when
+                eval(true)
+         then
+                Function.printInfo("group1 execute");
+         end
+
+
+        rule "declare"
+        salience 14
+          when
+                eval(true)
+         then
+                    Address add=new Address();
+                    add.setCity("中国上海");
+                    add.setAddressName("中国上海闸北区");
+                 printName(add.getCity(),add.getAddressName());
+
+         end
+
+
+//        rule "update tow"
+//        salience 14
+//        lock-on-active true
+//            when
+//                $p:Person( name memberOf "李大嘴"  )
+//            then
+//             $p.setDesc("我是李大嘴");
+//             Person p =new Person("abel",18);
+//                  drools.update(drools.getWorkingMemory().getFactHandleByIdentity($p), p);
+//                printName(p.getName(),p.getDesc());
+//        end
