@@ -67,6 +67,6 @@ public class Customer {
         return  this.name+"同学还有"
                 +this.money+"元钱,喝了"+this.drinkSum+"瓶酒, 有"
                 +this.getBlankCup()+"个空瓶和"
-                +this.getCap()+"个盖子";
+                +this.getCap()+"个盖子 \n";
     }
 }

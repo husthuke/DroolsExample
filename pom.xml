@@ -10,6 +10,7 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <version.commons.lang>2.6</version.commons.lang>
     </properties>
     <dependencies>
         <!-- drools -->
@@ -37,6 +38,12 @@
             <groupId>org.drools</groupId>
             <artifactId>drools-templates</artifactId>
             <version>6.5.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${version.commons.lang}</version>
+            <scope>compile</scope>
         </dependency>
         <!--log4j-->
         <dependency>

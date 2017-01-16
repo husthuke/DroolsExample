@@ -11,6 +11,7 @@ public class DrinkBeerTest {
         System.out.println("请输入买啤酒的总金额:");
         Scanner sc = new Scanner(System.in);
         int money = sc.nextInt();
+        //drinkSum:喝的瓶数 //blankCup:空瓶数 //cap:瓶盖数
         int drinkSum = 0, blankCup = 0, cap = 0;
         //drinkSum:喝的瓶数
         drinkSum = money / 2;

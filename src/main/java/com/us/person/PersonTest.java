@@ -5,6 +5,7 @@ import org.kie.api.definition.type.FactType;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.Agenda;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
@@ -15,7 +16,6 @@ import org.kie.api.runtime.rule.QueryResultsRow;
  */
 public  class PersonTest {
     static KieSession getSession() {
-
 
 
         KieServices ks = KieServices.Factory.get();
@@ -69,6 +69,7 @@ public  class PersonTest {
             ks.insert(p5);
 
             int count = ks.fireAllRules();
+
             //使用规则名来对要执行的规则做一个过滤,执行规则名匹配的规则
 //            TestAgendaFilter filter= new TestAgendaFilter("activa");
 //            int count = ks.fireAllRules(filter);

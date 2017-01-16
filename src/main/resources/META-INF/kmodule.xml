@@ -40,4 +40,12 @@
     <kbase name="PersonAgeKB" packages="com.us.personTemp">
         <ksession name="PersonAgeKS"/>
     </kbase>
+
+    <!--fusion -->
+    <!--<kbase name="fusionAge" equalsBehavior="equality" eventProcessingMode="stream" packages="com.us.fusion6">-->
+        <!--<ksession name="fusionAgeKS" default="true" type="stateful" clockType="pseudo"/>-->
+    <!--</kbase>-->
+    <kbase name="fusionAge" eventProcessingMode="stream" packages="com.us.fusion7">
+        <ksession name="fusionAgeKS"  clockType="pseudo"/>
+    </kbase>
 </kmodule>

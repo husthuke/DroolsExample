@@ -1,0 +1,53 @@
+package com.us.fusion
+
+//list any import classes here.
+import com.us.fusion.EventTest;
+
+
+//declare any global variables here
+declare EventTest
+    @role( event )
+end
+
+rule "this is flap"
+	salience 500
+when
+
+		$down : EventTest(uei matches "SNMP_Link_Down", $interface : interfejs) over window:time( 5s )
+		$up : EventTest(uei matches "SNMP_Link_Up",interfejs == $interface, this after $down)
+		not( EventTest( uei matches "SNMP_Link_Down", this != $down, this after $down ) )
+    	not( EventTest( uei matches "SNMP_Link_Up", this != $up, this after $up ) )
+
+then
+		System.err.println("\nFlapppp");
+		EventTest flap = new EventTest("Flap", $interface);
+		insert( flap );
+
+end
+
+rule "flappping"
+	salience 400
+when
+	$flap : EventTest(uei matches "Flap", $interfaceFlap: interfejs)
+		 accumulate($ev: EventTest(uei == $flap.uei, interfejs == $interfaceFlap)
+		 over window:time( 5s );
+		 $cntFlap: count($ev), $collectFlap : collectList($ev); $cntFlap > 3)
+	not EventTest(uei matches "Flapping", interfejs == $interfaceFlap)
+then
+	System.err.println("\nFlapowanie interfejsu " + $flap.interfejs + "  " + $cntFlap +  " razy w przeci gu ostatnich 5s");
+	EventTest flapping = new EventTest("Flapping", $interfaceFlap);
+		insert( flapping );
+end
+
+rule "flappping stop"
+	salience 400
+when
+
+	$flapping : EventTest(uei matches "Flapping", $interfaceFlap: interfejs);
+	Number( doubleValue < 3 ) from accumulate(
+        $ev : EventTest(uei matches "Flap", interfejs == $interfaceFlap) over window:time( 4s ),
+        count( $ev ) );
+then
+	System.err.println("\nFlapowanie interfejsu " + $interfaceFlap + " usta³o");
+	retract( $flapping );
+end

@@ -8,11 +8,7 @@ import org.kie.api.runtime.KieSession;
  * Created by yangyibo on 16/12/13.
  */
 
-//喝啤酒问题，小明去喝啤酒，啤酒搞活动，
-// 啤酒二元一瓶，
-// 两个空瓶可以再换一瓶啤酒，
-// 四个瓶盖也可以换一瓶啤酒，
-// 问小明花多少钱可以喝多少瓶啤酒？
+
 
 public class DrinkBeer {
     private static KieSession getSession() {
@@ -23,9 +19,6 @@ public class DrinkBeer {
 
     private static void drink() {
         KieSession ks = getSession();
-        //今年贝拉克·侯赛因·奥巴马55岁了,但很不幸他失业了,在前八年的工作中他的职位没有任何的晋升,
-        // 而且他没有明显的专业技能,尽管他能写一小段JavaScript代码。
-        //但是他仍然很难再次找到工作,怀着惆怅的心情奥巴马来到酒吧,想借酒浇愁,一醉方休。
         Customer c1 = new Customer("奥巴马", 10);
         ks.insert(c1);
         int count = ks.fireAllRules();

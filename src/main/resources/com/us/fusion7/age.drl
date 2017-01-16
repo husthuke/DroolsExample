@@ -1,0 +1,44 @@
+package com.us.fusion7
+import com.us.person.Person
+
+function void printName(String streamName,String name,String desc) {
+            System.out.println("streamName:"+streamName+"  name:"+name+" desc:"+ desc);
+
+        }
+
+
+declare Person
+    @role( event )
+end
+
+
+         rule "boy"
+            salience 1
+            when
+                $p : Person(age > 0) from entry-point "boy"
+            then
+                $p.setDesc("少年");
+                retract($p);
+                printName("boy",$p.getName(),$p.getDesc());
+        end
+
+        rule "youth"
+            salience 2
+            when
+                $p : Person(age > 12) from entry-point "youth";
+            then
+                $p.setDesc("青年");
+                retract($p);
+                printName("youth",$p.getName(),$p.getDesc());
+        end
+
+        rule "ageSum"
+            salience 2
+            when
+//                $p : Person(age > 0) over window:length(2) from entry-point "ageSum";
+                  $p : Person(age > 0) over window:length(2);
+            then
+                $p.setAge($p.getAge()+$p.getAge());
+                printName("ageAverage",$p.getName(),$p.getAge()+"");
+                retract($p);
+        end

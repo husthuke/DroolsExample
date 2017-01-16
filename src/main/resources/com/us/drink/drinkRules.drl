@@ -1,8 +1,12 @@
 package com.us.drink;
 import com.us.drink.Customer;
 
+    function void printInfo(String info){
+        System.out.println(info);
+    }
+
     rule "buy a beer and drink"
-      salience 1
+      salience 3
         when
         $c: Customer(money >= 2,$m:money,$b:blankCup,$d:drinkSum,$a:cap);
         then
@@ -11,14 +15,14 @@ import com.us.drink.Customer;
             $c.setDrinkSum($d+1);
             $c.setCap($a+1);
 
-            System.out.println($c.toString());
+           printInfo($c.toString());
 
             update($c);
 
     end
 
     rule "sale blank cup get a beer"
-      salience 3
+      salience 2
         when
             $c : Customer(blankCup>=2,$b:blankCup,$d:drinkSum,$a:cap);
         then
@@ -26,13 +30,13 @@ import com.us.drink.Customer;
             $c.setDrinkSum($d+1);
             $c.setCap($a+1);
 
-            System.out.println($c.toString());
+           printInfo($c.toString());
 
             update($c);
     end
 
         rule "sale cap and get a beer"
-          salience 2
+          salience 1
             when
                 $c : Customer(cap>=4,$b:blankCup,$d:drinkSum,$a:cap);
             then
@@ -40,7 +44,7 @@ import com.us.drink.Customer;
                 $c.setBlankCup($b+1);
                 $c.setDrinkSum($d+1);
 
-                System.out.println($c.toString());
+               printInfo($c.toString());
                 update($c);
         end
 
@@ -49,5 +53,5 @@ import com.us.drink.Customer;
             when
                 $c:Customer(blankCup < 2,money < 2,cap< 4);
             then
-               System.out.println("finish drink"+$c.toString());
+               printInfo("finish drink"+$c.toString());
         end

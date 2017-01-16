@@ -1,0 +1,25 @@
+
+package com.us.fusion;
+
+//list any import classes here.
+import com.us.fusion.EventTest;
+
+
+//declare any global variables here
+declare EventTest
+    @role( event )
+end
+
+rule "this is flap"
+	salience 500
+	duration( 2s )
+when
+		$down : EventTest(uei matches "SNMP_Link_Down", $interface : interfejs)
+		not( EventTest(uei matches "SNMP_Link_Up",interfejs == $interface, this after[0s,2s] $down) )
+
+then
+		System.err.println("\nALARM!!!");
+		EventTest flap = new EventTest("ALARM", $interface);
+		insert( flap );
+
+end
